@@ -1,0 +1,15 @@
+{
+    "name": "thusk/r2d2",
+    "description": "teamspeak bot for Nptunnel",
+    "type": "script",
+    "require": {
+        "thusk/ts3-php": "dev-master"
+    },
+    "authors": [
+        {
+            "name": "Daniel Rubin",
+            "email": "danielrubin95@hotmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
