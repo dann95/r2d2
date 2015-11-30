@@ -1,0 +1,1 @@
+Hola, mi nombre és R2D2, soy el bot del ts, si tienes alguna duda sobre los comandos mandame [b]!ayuda[/b]
