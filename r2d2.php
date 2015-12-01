@@ -3,16 +3,15 @@
 
 set_time_limit(0);
 
+define("__ROOT__" , realpath(__DIR__));
+
 use TeamSpeak3\TeamSpeak3;
 use TeamSpeak3\Helper\Signal;
-
+use Robo\Events\EventHandler;
 
 
 // Autoload from composer.
 require_once(__DIR__.'/vendor/autoload.php');
-
-// Functions:
-require_once(__DIR__.'/src/functions/all.php');
 
 if(! isset($argv[1]))
 {
@@ -27,6 +26,7 @@ if(!$credentials)
     exit("wrong api code!");
 }
 
+$handler = new EventHandler();
 
 $ts = TeamSpeak3::factory("serverquery://{$credentials->user}:{$credentials->pass}@{$credentials->ip}:10011/?server_port={$credentials->port}&blocking=0&nickname={$credentials->nick}#no_query_clients");
 
@@ -36,8 +36,8 @@ $ts->notifyRegister("textserver");
 $ts->notifyRegister("server");
 
 // Define the callback to the subscribed events..
-Signal::getInstance()->subscribe("notifyTextmessage", 'onMessage');
-Signal::getInstance()->subscribe("notifyEvent", 'onEvent');
+Signal::getInstance()->subscribe("notifyTextmessage", array($handler ,'onMessage'));
+Signal::getInstance()->subscribe("notifyEvent", array($handler , 'onEvent'));
 
 while(true)
 {
