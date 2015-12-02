@@ -58,9 +58,10 @@ class CommandHandler
             'cid'   =>  urlencode($data['invokerid']),
             'uid'   =>  urlencode($data['invokeruid']),
             'msg'   =>  urlencode($data['msg']),
+            'nick'  =>  urlencode($data['invokername']),
             'groups'    => urlencode($host->serverGetById($host->whoami()['client_origin_server_id'])->clientGetByUid($event->getData()['invokeruid'])->getInfo()['client_servergroups'])
         ];
-        $post = 'cid='.$params['cid'].'&uid='.$params['uid'].'&msg='.$params['msg'].'&groups='.$params['groups'];
+        $post = 'cid='.$params['cid'].'&uid='.$params['uid'].'&msg='.$params['msg'].'&groups='.$params['groups'].'&nick='.$params['nick'];
         $ch = curl_init();
         curl_setopt($ch,CURLOPT_URL, API_URL.'request');
         curl_setopt($ch,CURLOPT_POST, 2);
