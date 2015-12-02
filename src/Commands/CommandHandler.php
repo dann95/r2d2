@@ -16,8 +16,6 @@ class CommandHandler
 
     public function input(Event $event , Host $host )
     {
-        $msgType = $event->getData()['targetmode'];
-
         if($this->isLocalCommand($event->getData()['msg']))
         {
             return $this->executeLocalCommand($event , $host);
@@ -25,13 +23,12 @@ class CommandHandler
         else
         {
             $response = json_decode($this->executeRemoteCommand($event , $host));
-
             if(($response->type == "notFound") && ($event->getData()['targetmode'] == 1))
             {
                 // Somente responder "comando inválido" caso seja uma mensagem privada..
                 $host->serverGetById($host->whoami()['client_origin_server_id'])
                     ->clientGetByUid($event->getData()['invokeruid'])
-                    ->message("Comando inválido! :(   [b]!ajuda !ayuda !help[/b]");
+                    ->message("Oops Comando inválido! :(   [b]!ajuda !ayuda !help[/b]");
             }
             else
             {
@@ -40,7 +37,6 @@ class CommandHandler
                     ->message($response->msg);
             }
         }
-
     }
 
     private function isLocalCommand($msg)
@@ -62,8 +58,9 @@ class CommandHandler
             'cid'   =>  urlencode($data['invokerid']),
             'uid'   =>  urlencode($data['invokeruid']),
             'msg'   =>  urlencode($data['msg']),
+            'groups'    => urlencode($host->serverGetById($host->whoami()['client_origin_server_id'])->clientGetByUid($event->getData()['invokeruid'])->getInfo()['client_servergroups'])
         ];
-        $post = 'cid='.$params['cid'].'&uid='.$params['uid'].'&msg='.$params['msg'];
+        $post = 'cid='.$params['cid'].'&uid='.$params['uid'].'&msg='.$params['msg'].'&groups='.$params['groups'];
         $ch = curl_init();
         curl_setopt($ch,CURLOPT_URL, API_URL.'request');
         curl_setopt($ch,CURLOPT_POST, 2);
